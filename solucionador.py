@@ -1,30 +1,37 @@
 import random
 
-def index_zero(config): 
+
+def index_zero(config):
     for index in range(len(config)):
         if config[index] == 0:
             return index
 
-def move_peca(config,direcao):
+
+def move_peca(config, direcao):
     index_vazio = index_zero(config)
     novo_estado = config.copy()
     if direcao == 'a':
         if index_vazio % 3 != 0:
-            novo_estado[index_vazio], novo_estado[index_vazio - 1] = novo_estado[index_vazio - 1], novo_estado[index_vazio]
+            novo_estado[index_vazio], novo_estado[index_vazio -
+                                                  1] = novo_estado[index_vazio - 1], novo_estado[index_vazio]
 
     if direcao == 'd':
         if index_vazio % 3 != 2:
-            novo_estado[index_vazio],novo_estado[index_vazio  + 1] =  novo_estado[index_vazio  + 1], novo_estado [index_vazio]
+            novo_estado[index_vazio], novo_estado[index_vazio +
+                                                  1] = novo_estado[index_vazio + 1], novo_estado[index_vazio]
 
     if direcao == 'w':
         if index_vazio > 2:
-            novo_estado[index_vazio], novo_estado[index_vazio - 3] =  novo_estado[index_vazio - 3], novo_estado[index_vazio]
+            novo_estado[index_vazio], novo_estado[index_vazio -
+                                                  3] = novo_estado[index_vazio - 3], novo_estado[index_vazio]
 
     if direcao == 's':
         if index_vazio < 6:
-            novo_estado[index_vazio], novo_estado[index_vazio + 3] =  novo_estado[index_vazio + 3], novo_estado[index_vazio]
-    
-    return novo_estado    
+            novo_estado[index_vazio], novo_estado[index_vazio +
+                                                  3] = novo_estado[index_vazio + 3], novo_estado[index_vazio]
+
+    return novo_estado
+
 
 def insere_chave_nova_min_heap(heap, tam, chave):
     heap.append(chave)
@@ -32,59 +39,76 @@ def insere_chave_nova_min_heap(heap, tam, chave):
 
 
 def aumentar_chave(heap, pos, novo):
-	if novo.f <= heap[pos].f:
-		heap[pos] = novo
-		while pos > 0 and heap[(pos-1)//2].f > heap[pos].f:
-			heap[pos], heap[(pos-1)//2] = heap[(pos-1)//2], heap[pos]
-			pos = (pos-1)//2
+    if novo.f <= heap[pos].f:
+        heap[pos] = novo
+        while pos > 0 and heap[(pos-1)//2].f > heap[pos].f:
+            heap[pos], heap[(pos-1)//2] = heap[(pos-1)//2], heap[pos]
+            pos = (pos-1)//2
+
 
 class Solucionador:
-    def __init__(self,estado,passos):
+    def __init__(self, estado, passos):
         self.estado = estado
         self.g = passos
         self.h = self.calcula_h()
         self.f = self.g + self.h
 
+    def calculaQuantidadeDeInversoes(self):
+        num_inversoes = 0
+        for i in range(len(self.estado)):
+            for j in range(i + 1, len(self.estado)):
+                if self.estado[i] != 0 and self.estado[j] != 0:
+                    if (self.estado[i] > self.estado[j]):
+                        num_inversoes += 1
+
+        return num_inversoes
 
     def calcula_h(self):
-        self.h = 0
+        h = 0
         for index in self.estado:
             if self.estado[index] != 0:
                 if self.estado[index] != index:
-                    self.h = self.h + 1
-        return self.h
+                    h = h + 1
+        return h
 
     def transicoes(self):
+        transicoes = list(filter(lambda e: e.calculaQuantidadeDeInversoes() % 2 == 0, [Solucionador(move_peca(self.estado, "a"), self.g+1), Solucionador(
+            move_peca(self.estado, "d"), self.g+1), Solucionador(move_peca(self.estado, "w"), self.g+1), Solucionador(move_peca(self.estado, "s"), self.g+1)]))
 
-        return [Solucionador(move_peca(self.estado,"a"),self.g+1),Solucionador(move_peca(self.estado,"d"),self.g+1),Solucionador(move_peca(self.estado,"w"),self.g+1),Solucionador(move_peca(self.estado,"s"),self.g+1)]
+        return transicoes
 
     def BuscaInformada(self):
-        print(self.estado)
         agenda = []
         agenda.append(self)
 
         passados = {self}
         estado = self
-        
+
         while len(agenda) > 0:
             estado = agenda.pop(0)
-            print(estado)
-            if estado.estado == [0,1,2,3,4,5,6,7,8]:
+
+            if estado.estado == [0, 1, 2, 3, 4, 5, 6, 7, 8]:
                 return estado
             transi = estado.transicoes()
+
+            if len(transi) == 0:  # se nao houver transicao para o estado
+                return 0
+
             for transicao in transi:
                 proximo = transicao
                 if proximo not in passados:
-                    insere_chave_nova_min_heap(agenda, len(agenda), proximo)
+                    insere_chave_nova_min_heap(
+                        agenda, len(agenda), proximo)
                     passados.add(proximo)
-            
+
         return None
 
-    def __hash__(self): #para o set conseguir guardar um objeto
+    def __hash__(self):  # para o set conseguir guardar um objeto
         return hash(self.g)
 
-    def __eq__(self, other):  #para o set conseguir diferenciar objetos (nao inserir elementos repetidos)
-        if not isinstance(other, type(self)): return NotImplemented
+    def __eq__(self, other):  # para o set conseguir diferenciar objetos (nao inserir elementos repetidos)
+        if not isinstance(other, type(self)):
+            return NotImplemented
         return self.estado == other.estado
 
     def __lt__(self, other):
@@ -93,12 +117,17 @@ class Solucionador:
     def __repr__(self):
         return "{}".format(self.estado)
 
+
 def cria_aleatorio():
-    
-    lista = list(range(0,9))
+
+    lista = list(range(0, 9))
     random.shuffle(lista)
     return Solucionador(lista, 0)
 
+
 print("Calculando solução...")
-solucionador = Solucionador([1,2,0,3,4,5,6,7,8],0)
-print(solucionador.BuscaInformada().g)
+solucionador = Solucionador([1, 2, 3, 0, 4, 6, 7, 5, 8], 0)
+if not solucionador.BuscaInformada():
+    print("Estado não solucionável")
+else:
+    print(solucionador.BuscaInformada().g)
