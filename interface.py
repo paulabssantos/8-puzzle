@@ -31,7 +31,7 @@ class Interface:
         self.largura = largura
         self.puzzle = puzzle
         self.janela = pygame.display.set_mode((self.largura,self.altura))
-        self.nome_janela = pygame.display.set_caption("8Puzzle")
+        self.nome_janela = pygame.display.set_caption("8-Puzzle")
     
     def pega_evento(self):
         for evento in pygame.event.get():

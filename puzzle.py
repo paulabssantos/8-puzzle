@@ -11,8 +11,12 @@ class Game:
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
-        self.tiles_grid = self.create_game()
+        self.tiles_grid = make_matrix(cria_aleatorio())
         self.tiles_grid_completed = self.create_game()
+        self.buttons_list = [
+            sprite.Button(500, 100, 200, 50, "Novo Jogo", WHITE, BLACK),
+            sprite.Button(500, 175, 200, 50, "Resolver", WHITE, BLACK)
+            ]
         self.draw_tiles()
 
     def run(self):
@@ -55,6 +59,8 @@ class Game:
         self.screen.fill(BGCOLOUR)
         self.all_sprites.draw(self.screen)
         self.draw_grid()
+        for button in self.buttons_list:
+            button.draw(self.screen)
         pygame.display.flip()
 
 
@@ -83,6 +89,14 @@ class Game:
 
                             self.draw_tiles()
 
+                for button in self.buttons_list:
+                    if button.click(mouse_x, mouse_y):
+                        if button.text == "Novo Jogo":
+                            self.new()
+                            # self.start_shuffle()
+                            # print("Novo Jogo")
+                        if button.text == "Resolver":
+                            print("Resolver")
             # if event.type == pygame.KEYDOWN:
             #     for row, tiles in enumerate(self.tiles):
             #         for col, tile in enumerate(tiles):
@@ -99,10 +113,34 @@ class Game:
             #             elif event.key == pygame.K_DOWN:
             #                 print("Apertou pra Baixo")
             
-                
 
+def make_matrix(lis):
+    m = []
+    for i in range(GAME_SIZE):
+        m.append([])
+        for j in range(GAME_SIZE):
+            m[i].append(lis[(i*GAME_SIZE) + j])
+    return m
+
+def cria_aleatorio():
+    lista = list(range(0,9))
+    random.shuffle(lista)
+    return lista
+
+matrizes = [
+    make_matrix([0,1,2,3,4,5,6,8,7]),
+    make_matrix([0,1,2,3,4,6,5,7,8]),
+    make_matrix([0,1,3,2,4,5,6,7,8]),
+    make_matrix([0,2,1,3,4,5,6,7,8]),
+    make_matrix([0,1,2,4,3,5,6,7,8]),
+    make_matrix([0,1,2,3,4,6,5,7,8]),
+    make_matrix([0,1,2,3,5,4,6,7,8]),
+    make_matrix([0,3,2,1,4,5,6,7,8])
+]
 game = Game()
 
 while True:
     game.new()
     game.run()
+
+#print(make_matrix([0,1,2,3,4,5,6,7,8]))
