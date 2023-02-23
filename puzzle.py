@@ -2,6 +2,7 @@ import pygame
 import random
 from settings import *
 import sprite
+import time
 
 class Game:
     def __init__(self):
@@ -16,7 +17,7 @@ class Game:
         self.buttons_list = [
             sprite.Button(500, 100, 200, 50, "Novo Jogo", WHITE, BLACK),
             sprite.Button(500, 175, 200, 50, "Resolver", WHITE, BLACK)
-            ]
+        ]
         self.draw_tiles()
 
     def run(self):
@@ -63,6 +64,11 @@ class Game:
             button.draw(self.screen)
         pygame.display.flip()
 
+    ## Essa aqui é a lógica de atualizar o valor da tela de acordo com uma matriz passada
+    def change_frame(self, matrix):
+        self.tiles_grid = matrix
+        self.all_sprites.update()
+        self.draw_tiles()
 
     def events(self):
         for event in pygame.event.get():
@@ -96,22 +102,7 @@ class Game:
                             # self.start_shuffle()
                             # print("Novo Jogo")
                         if button.text == "Resolver":
-                            print("Resolver")
-            # if event.type == pygame.KEYDOWN:
-            #     for row, tiles in enumerate(self.tiles):
-            #         for col, tile in enumerate(tiles):
-
-            #             if event.key == pygame.K_LEFT:
-            #                 print("Apertou pra Esqueda")
-
-            #             elif event.key == pygame.K_RIGHT:
-            #                 print("Apertou pra Direita")
-
-            #             elif event.key == pygame.K_UP:
-            #                 print("Apertou pra Cima")
-
-            #             elif event.key == pygame.K_DOWN:
-            #                 print("Apertou pra Baixo")
+                           self.change_frame()
             
 
 def make_matrix(lis):
