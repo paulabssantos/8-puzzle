@@ -1,3 +1,5 @@
+import random
+
 def index_zero(config): 
     for index in range(len(config)):
         if config[index] == 0:
@@ -57,6 +59,7 @@ class Solucionador:
         return [Solucionador(move_peca(self.estado,"a"),self.g+1),Solucionador(move_peca(self.estado,"d"),self.g+1),Solucionador(move_peca(self.estado,"w"),self.g+1),Solucionador(move_peca(self.estado,"s"),self.g+1)]
 
     def BuscaInformada(self):
+        print(self.estado)
         agenda = []
         agenda.append(self)
 
@@ -89,6 +92,12 @@ class Solucionador:
 
     def __repr__(self):
         return "{}".format(self.estado)
+
+def cria_aleatorio():
+    
+    lista = list(range(0,9))
+    random.shuffle(lista)
+    return Solucionador(lista, 0)
 
 print("Calculando solução...")
 solucionador = Solucionador([1,2,0,3,4,5,6,7,8],0)

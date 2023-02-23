@@ -1,4 +1,6 @@
 import pygame
+import solucionador
+import settings
 
 
 class Puzzle:
@@ -50,7 +52,7 @@ class Interface:
     def inicia_tela(self):
         pygame.init()
         font = pygame.font.SysFont("Arial",60)
-        titulo = font.render("8Puzzle",True,(255,196,166))
+        titulo = font.render("8-Puzzle",True,(255,196,166))
         self.janela.blit(titulo,(220,20))    
        
 
