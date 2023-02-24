@@ -110,33 +110,36 @@ class Game:
                         if button.text == "Novo Jogo":
                             self.new()
                         if button.text == "Resolver":
-                            #    Gerar um array com a combinacao atual
-                            arr = self.get_array()
-                            print("Calculando solução...")
-                           #    Gerar um solucionador
-                            solucionador = Solucionador(arr, 0, [])
-                            #   Chamar a funcao que resolve
-                            a = solucionador.BuscaInformada()
-                             #   pegar o retorno
-                            if a is None:
-                                print("Estado não solucionável")
-                            else:
-                                if a.passado is None:
-                                    print("passado ta vazio")
-                                else:
-                                    for element in a.passado:
-                                        print("Nova Matriz")
-                                        for lin in make_matrix(element):
-                                            print(lin)
-                        
+                            self.resolver()
 
-                        
-                       
-                        #   chamar um a um no change_frame
-                            # for element in matrizes:
-                            #     self.change_frame(element)
-                            #     time.sleep(1)
-            
+    def resolver(self):
+        # Gerar um array com a combinacao atual
+        arr = self.get_array()
+        print("Calculando solução...")
+        #    Gerar um solucionador
+        solucionador = Solucionador(arr, 0, [])
+        #   Chamar a funcao que resolve
+        a = solucionador.BuscaInformada()
+            #   pegar o retorno
+        if a is None:
+            print("Estado não solucionável")
+        else:
+            if a.passado is None:
+                print("passado ta vazio")
+            else:
+                for element in a.passado:
+                    print("Nova Matriz")
+                    for lin in make_matrix(element):
+                        print(lin)
+
+
+
+
+    #   chamar um a um no change_frame
+        # for element in matrizes:
+        #     self.change_frame(element)
+        #     time.sleep(1)
+
 
 def make_matrix(lis):
     m = []
