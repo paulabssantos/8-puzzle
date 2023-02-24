@@ -1,6 +1,7 @@
 import pygame
 import random
 from settings import *
+from solucionador import *
 import sprite
 import time
 
@@ -12,7 +13,7 @@ class Game:
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
-        self.tiles_grid = make_matrix(cria_aleatorio())
+        self.tiles_grid = make_matrix([0,1,2,3,4,5,6,7,8])
         self.tiles_grid_completed = self.create_game()
         self.buttons_list = [
             sprite.Button(500, 100, 200, 50, "Novo Jogo", WHITE, BLACK),
@@ -71,6 +72,14 @@ class Game:
         self.tiles_grid_completed = self.create_game()
         self.draw_tiles()
 
+    def get_array(self):   
+        arr = []
+        for line in self.tiles:
+            for element in line:
+                arr.append(int(element.text))
+        return arr
+
+
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -101,15 +110,32 @@ class Game:
                         if button.text == "Novo Jogo":
                             self.new()
                         if button.text == "Resolver":
-                            matrizes = [make_matrix([0,1,2,3,4,5,6,8,7]),make_matrix([0,1,2,3,4,6,5,7,8]),make_matrix([0,1,3,2,4,5,6,7,8]), make_matrix([0,2,1,3,4,5,6,7,8]),make_matrix([0,1,2,4,3,5,6,7,8]),make_matrix([0,2,2,3,2,2,5,7,8]),make_matrix([0,1,2,3,5,4,6,7,8]),make_matrix([0,3,2,1,4,5,6,7,8])]
-                        #    Gerar um array com a combinacao atual
-                        #    Gerar um solucionador
-                        #   Chamar a funcao que resolve
-                        #   pegar o retorno
+                            #    Gerar um array com a combinacao atual
+                            arr = self.get_array()
+                            print("Calculando solução...")
+                           #    Gerar um solucionador
+                            solucionador = Solucionador(arr, 0, [])
+                            #   Chamar a funcao que resolve
+                            a = solucionador.BuscaInformada()
+                             #   pegar o retorno
+                            if a is None:
+                                print("Estado não solucionável")
+                            else:
+                                if a.passado is None:
+                                    print("passado ta vazio")
+                                else:
+                                    for element in a.passado:
+                                        print("Nova Matriz")
+                                        for lin in make_matrix(element):
+                                            print(lin)
+                        
+
+                        
+                       
                         #   chamar um a um no change_frame
-                        for element in matrizes:
-                                self.change_frame(element)
-                                time.sleep(1)
+                            # for element in matrizes:
+                            #     self.change_frame(element)
+                            #     time.sleep(1)
             
 
 def make_matrix(lis):
@@ -125,20 +151,8 @@ def cria_aleatorio():
     random.shuffle(lista)
     return lista
 
-matrizes = [
-    make_matrix([0,1,2,3,4,5,6,8,7]),
-    make_matrix([0,1,2,3,4,6,5,7,8]),
-    make_matrix([0,1,3,2,4,5,6,7,8]),
-    make_matrix([0,2,1,3,4,5,6,7,8]),
-    make_matrix([0,1,2,4,3,5,6,7,8]),
-    make_matrix([0,2,2,3,2,2,5,7,8]),
-    make_matrix([0,1,2,3,5,4,6,7,8]),
-    make_matrix([0,3,2,1,4,5,6,7,8])
-]
 game = Game()
 
 while True:
     game.new()
     game.run()
-
-#print(make_matrix([0,1,2,3,4,5,6,7,8]))

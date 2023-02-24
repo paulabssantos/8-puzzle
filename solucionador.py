@@ -139,15 +139,15 @@ def make_matrix(lis):
     return m
 
 
-print("Calculando solução...")
-solucionador = Solucionador([1,4, 2,3,5,0,6,7,8], 0, [])
+# print("Calculando solução...")
+# solucionador = Solucionador([1,4, 2,3,5,0,6,7,8], 0, [])
 
-a = solucionador.BuscaInformada()
+# a = solucionador.BuscaInformada()
 
-if not a:
-    print("Estado não solucionável")
-else:
-    for element in a.passado:
-        print("Nova Matriz")
-        for lin in make_matrix(element):
-            print(lin)
+# if not a:
+#     print("Estado não solucionável")
+# else:
+#     for element in a.passado:
+#         print("Nova Matriz")
+#         for lin in make_matrix(element):
+#             print(lin)
