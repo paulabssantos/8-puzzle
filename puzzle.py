@@ -66,8 +66,9 @@ class Game:
 
     ## Essa aqui é a lógica de atualizar o valor da tela de acordo com uma matriz passada
     def change_frame(self, matrix):
+        self.all_sprites = pygame.sprite.Group()
         self.tiles_grid = matrix
-        self.all_sprites.update()
+        self.tiles_grid_completed = self.create_game()
         self.draw_tiles()
 
     def events(self):
@@ -99,10 +100,16 @@ class Game:
                     if button.click(mouse_x, mouse_y):
                         if button.text == "Novo Jogo":
                             self.new()
-                            # self.start_shuffle()
-                            # print("Novo Jogo")
                         if button.text == "Resolver":
-                           self.change_frame()
+                            matrizes = [make_matrix([0,1,2,3,4,5,6,8,7]),make_matrix([0,1,2,3,4,6,5,7,8]),make_matrix([0,1,3,2,4,5,6,7,8]), make_matrix([0,2,1,3,4,5,6,7,8]),make_matrix([0,1,2,4,3,5,6,7,8]),make_matrix([0,2,2,3,2,2,5,7,8]),make_matrix([0,1,2,3,5,4,6,7,8]),make_matrix([0,3,2,1,4,5,6,7,8])]
+                        #    Gerar um array com a combinacao atual
+                        #    Gerar um solucionador
+                        #   Chamar a funcao que resolve
+                        #   pegar o retorno
+                        #   chamar um a um no change_frame
+                        for element in matrizes:
+                                self.change_frame(element)
+                                time.sleep(1)
             
 
 def make_matrix(lis):
@@ -124,7 +131,7 @@ matrizes = [
     make_matrix([0,1,3,2,4,5,6,7,8]),
     make_matrix([0,2,1,3,4,5,6,7,8]),
     make_matrix([0,1,2,4,3,5,6,7,8]),
-    make_matrix([0,1,2,3,4,6,5,7,8]),
+    make_matrix([0,2,2,3,2,2,5,7,8]),
     make_matrix([0,1,2,3,5,4,6,7,8]),
     make_matrix([0,3,2,1,4,5,6,7,8])
 ]
