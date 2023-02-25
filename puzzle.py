@@ -47,7 +47,6 @@ class Game:
             for col, tile in enumerate(x):
                 self.tiles[row].append(sprite.Tile(self, col, row, str(tile)))
 
-
     def draw_grid(self):
         for row in range(-1, GAME_SIZE * TILESIZE, TILESIZE):
             pygame.draw.line(self.screen, LIGHTGREY, (row, 0), (row, GAME_SIZE * TILESIZE))
@@ -66,11 +65,10 @@ class Game:
         pygame.display.flip()
 
     ## Essa aqui é a lógica de atualizar o valor da tela de acordo com uma matriz passada
-    def change_frame(self, matrix):
-        self.all_sprites = pygame.sprite.Group()
-        self.tiles_grid = matrix
-        self.tiles_grid_completed = self.create_game()
+    def change_frame(self, matrix,lin,col):
+        self.tiles_grid[lin][col] = matrix[lin][col]
         self.draw_tiles()
+        
 
     def get_array(self):   
         arr = []
@@ -129,8 +127,10 @@ class Game:
             else:
                 for element in a.passado:
                     print("Nova Matriz")
-                    for lin in make_matrix(element):
-                        print(lin)
+                    matriz = make_matrix(element)
+                    for i in range(3):
+                        for j in range(3):
+                            self.change_frame(matriz,i,j)
 
 
 
