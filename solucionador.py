@@ -52,7 +52,7 @@ class Solucionador:
         self.g = passos
         self.h = self.calcula_h()
         self.f = self.g + self.h
-        self.passado  = passado
+        self.passado = passado
 
     def calculaQuantidadeDeInversoes(self):
         num_inversoes = 0
@@ -76,10 +76,12 @@ class Solucionador:
         p = self.passado
         p.append(self.estado)
         transicoes = list(filter(lambda e: e.calculaQuantidadeDeInversoes() % 2 == 0, [Solucionador(move_peca(self.estado, "a"), self.g+1, p),
-                                                                                      Solucionador(move_peca(self.estado, "d"), self.g+1, p),
-                                                                                      Solucionador(move_peca(self.estado, "w"), self.g+1, p),
-                                                                                      Solucionador(move_peca(self.estado, "s"), self.g+1, p)]))
- 
+                                                                                       Solucionador(
+                                                                                           move_peca(self.estado, "d"), self.g+1, p),
+                                                                                       Solucionador(
+                                                                                           move_peca(self.estado, "w"), self.g+1, p),
+                                                                                       Solucionador(move_peca(self.estado, "s"), self.g+1, p)]))
+
         return transicoes
 
     def BuscaInformada(self):
@@ -88,16 +90,15 @@ class Solucionador:
 
         passados = {self}
         estado = self
-        print("antes de entrar no while")
         while len(agenda) > 0:
             estado = agenda.pop(0)
-            print("Verificou novo estado")
             if estado.estado == [0, 1, 2, 3, 4, 5, 6, 7, 8]:
+                self.passado.append(estado.estado)
                 return estado
             transi = estado.transicoes()
 
             if len(transi) == 0:  # se nao houver transicao para o estado
-                return 0
+                return None
 
             for transicao in transi:
                 proximo = transicao
@@ -105,7 +106,6 @@ class Solucionador:
                     insere_chave_nova_min_heap(
                         agenda, len(agenda), proximo)
                     passados.add(proximo)
-                    print("estados armazenados: ", len(agenda))
 
         return None
 
@@ -130,6 +130,7 @@ def cria_aleatorio():
     random.shuffle(lista)
     return Solucionador(lista, 0)
 
+
 def make_matrix(lis):
     m = []
     for i in range(3):
@@ -137,17 +138,3 @@ def make_matrix(lis):
         for j in range(3):
             m[i].append(lis[(i*3) + j])
     return m
-
-
-# print("Calculando solução...")
-# solucionador = Solucionador([1,4, 2,3,5,0,6,7,8], 0, [])
-
-# a = solucionador.BuscaInformada()
-
-# if not a:
-#     print("Estado não solucionável")
-# else:
-#     for element in a.passado:
-#         print("Nova Matriz")
-#         for lin in make_matrix(element):
-#             print(lin)
