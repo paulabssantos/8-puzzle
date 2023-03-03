@@ -6,7 +6,7 @@ import time
 
 class Game:
     def __init__(self):
-        self.menu = ['R - Resolver', 'E - Embaralhar', 'Esc - Exit']
+        self.menu = ['R - Resolver', 'E - Embaralhar', 'Esc - Sair']
         curses.wrapper(self.main)
 
     def resolver(self, arr):
