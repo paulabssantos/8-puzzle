@@ -6,7 +6,7 @@ import time
 
 class Game:
     def __init__(self):
-        self.menu = ['Resolver', 'Embaralhar', 'Exit']
+        self.menu = ['R - Resolver', 'E - Embaralhar', 'Esc - Exit']
         curses.wrapper(self.main)
 
     def resolver(self, arr):
@@ -28,6 +28,7 @@ class Game:
                     ...
                     self.stdscr.clear()
                     matriz = make_matrix(element)
+                    self.lista = element
                     for i in range(3):
                         for j in range(3):
                             self.stdscr.addstr(i+5, j*(4+2) + 10+1,
@@ -78,29 +79,42 @@ class Game:
 
         # print the menu
         self.print_menu(current_row)
-        lista = self.lista_inicial()
-        self.imprime_matriz(lista)
+        self.lista = self.lista_inicial()
+        self.imprime_matriz(self.lista)
 
         while 1:
             key = stdscr.getch()
+            # Se selecionou E de embaralhar
+            if int(key) == 101:
+                self.lista = self.cria_aleatorio()
+                self.imprime_matriz(self.lista)
 
-            if key == curses.KEY_UP and current_row > 0:
-                current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(self.menu)-1:
-                current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                if self.menu[current_row] == "Resolver":
-                    self.resolver(lista)
-                elif self.menu[current_row] == "Embaralhar":
-                    lista = self.cria_aleatorio()
-                    self.imprime_matriz(lista)
-                stdscr.getch()
-                # if user selected last row, exit the program
-                if current_row == len(self.menu)-1:
-                    break
+            # Se selecionou o R de resolver
+            elif int(key) == 114:
+                self.resolver(self.lista)
+
+            # Se selecionou o Esc de sair
+            elif int(key) == 27:
+                break
+
+            elif key == curses.KEY_UP:
+                new_lista = move_peca(self.lista, 'w')
+                self.lista = new_lista
+
+            elif key == curses.KEY_LEFT:
+                new_lista = move_peca(self.lista, 'a')
+                self.lista = new_lista
+
+            elif key == curses.KEY_RIGHT:
+                new_lista = move_peca(self.lista, 'd')
+                self.lista = new_lista
+            
+            elif key == curses.KEY_DOWN:
+                new_lista = move_peca(self.lista, 's')
+                self.lista = new_lista
 
             self.print_menu(current_row)
-            self.imprime_matriz(lista)
+            self.imprime_matriz(self.lista)
 
     def imprime_matriz(self, lista):
         matriz = make_matrix(lista)
