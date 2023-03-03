@@ -49,12 +49,7 @@ class Game:
         for idx, row in enumerate(self.menu):
             x = self.screen_width // 2 - len(row) // 2
             y = self.screen_height // 2 - len(self.menu) // 2 + idx
-            if idx == selected_row_idx:
-                self.stdscr.attron(curses.color_pair(1))
-                self.stdscr.addstr(y, x, row)
-                self.stdscr.attroff(curses.color_pair(1))
-            else:
-                self.stdscr.addstr(y, x, row)
+            self.stdscr.addstr(y, x, row)
         self.stdscr.refresh()
 
     def print_center(self, text):
