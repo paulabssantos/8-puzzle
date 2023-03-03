@@ -1,5 +1,4 @@
 import curses
-from settings import *
 from solucionador import *
 import time
 
@@ -38,13 +37,13 @@ class Game:
 
     def make_matrix(lis):
         m = []
-        for i in range(GAME_SIZE):
+        for i in range(3):
             m.append([])
-            for j in range(GAME_SIZE):
-                m[i].append(lis[(i*GAME_SIZE) + j])
+            for j in range(3):
+                m[i].append(lis[(i*3) + j])
         return m
 
-    def print_menu(self, selected_row_idx):
+    def print_menu(self):
         self.stdscr.clear()
         for idx, row in enumerate(self.menu):
             x = self.screen_width // 2 - len(row) // 2
@@ -73,7 +72,7 @@ class Game:
         current_row = 0
 
         # print the menu
-        self.print_menu(current_row)
+        self.print_menu()
         self.lista = self.lista_inicial()
         self.imprime_matriz(self.lista)
 
@@ -103,12 +102,12 @@ class Game:
             elif key == curses.KEY_RIGHT:
                 new_lista = move_peca(self.lista, 'd')
                 self.lista = new_lista
-            
+
             elif key == curses.KEY_DOWN:
                 new_lista = move_peca(self.lista, 's')
                 self.lista = new_lista
 
-            self.print_menu(current_row)
+            self.print_menu()
             self.imprime_matriz(self.lista)
 
     def imprime_matriz(self, lista):
